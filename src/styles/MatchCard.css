@@ -1,0 +1,28 @@
+#card {
+    background-color: #1c1c1c;
+    color: #f1f1f1;
+    width: 350px;
+    min-width: 250px;
+    margin: 10px;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    border-left: 4px solid #27ff7d;
+    font-family: 'Arial', sans-serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+#card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 255, 130, 0.25);
+}
+
+#card h3 {
+    color: #27ff7d;
+    margin-bottom: 8px;
+}
+
+#card p {
+    font-size: 0.95rem;
+}
