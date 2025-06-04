@@ -20,7 +20,7 @@ export const UserContext = createContext<UserContextType>({
         email: "", username: "", first_name: "",
         last_name:  "", is_active:  false,
         level: [], experience: 0, school_id:  1,
-        course: "1",password: ""
+        course: "1",password: "",id: 0
     },
     setCurrentUser: user => {},
     login: (email:string,password:string): Promise<boolean> => Promise.resolve(true),
@@ -44,7 +44,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
                 email: "", username: "", first_name: "",
                 last_name:  "", is_active:  false,
                 level: "", experience: 0, school_id:  1,
-                course: "1", password: ""
+                course: "1", password: "", id: 0
             }
             :
             JSON.parse(sessionStorage.getItem("user")!)
@@ -58,6 +58,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
                 "email": email,
                 "password": password
             })
+            console.log(response.data.user)
             setCurrentUser(response.data.user)
             sessionStorage.setItem("user",JSON.stringify(response.data.user))
             sessionStorage.setItem("login", "true")

@@ -2,6 +2,7 @@ import UsersRanking from "../components/UsersRanking";
 import TeamsRanking from "../components/TeamsRanking";
 import MatchsListPage from "../components/MatchsListPage";
 import HomeTabPage from "../components/HomeTabPage";
+import ListadoApuestas from "../components/ListadoApuestas";
 
 export const homeMenuOptions = [
   {
@@ -12,7 +13,7 @@ export const homeMenuOptions = [
   {
     label: "Mis Predicciones",
     icon: "pi pi-money-bill mr-2",
-    content: <div>Contenido de Predicciones</div>,
+    content: <ListadoApuestas/>,
   },
   {
     label: "Partidos",

@@ -29,7 +29,6 @@ export const MatchProvider: FC<MatchProviderProps> = ({ children }:MatchProvider
     const getMatchsList = async ():Promise<void> => {
         try {
             const response:AxiosResponse = await axios.get(`${url}matchs/getMatchList/`)
-            console.log(response.data.matchs)
             setMatchs(response.data.matchs)
         } catch (error) {
             console.log(error)
