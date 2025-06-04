@@ -34,20 +34,20 @@ const MatchCard = (props:MatchCardProps) => {
     return (
         <Card id="card" title={title} onClick={() => {
             props.setSelectedMatch(props.match)
-            props.setVisibleSideBar(true)
+            if (props.match.status !== "FINALIZADO") props.setVisibleSideBar(true)
         }}>
             <div className="flex flex-row gap-5 align-items-center justify-content-center">
                 <div className="flex flex-column gap-2 align-items-center justify-content-center">
                     <span>{props.match.local_team.nombre}</span>
                     <span className="font-bold" style={{ fontSize: '1.5rem' }}>
-                        {props.match.local_team_score !== null ? props.match.local_team_score : ''}
+                        {props.match.local_team_score !== null ? props.match.local_team_score : '0'}
                     </span>
                 </div>
 
                 <div className="flex flex-column gap-2 align-items-center justify-content-center">
                     <span>{props.match.away_team.nombre}</span>
                     <span className="font-bold" style={{fontSize: '1.5rem' }}>
-                        {props.match.away_team_score !== null ? props.match.away_team_score : ''}
+                        {props.match.away_team_score !== null ? props.match.away_team_score : '0'}
                     </span>
                 </div>
             </div>

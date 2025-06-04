@@ -43,7 +43,8 @@ function Register() {
         course: "",
         level: ["RECLUTA", "Recluta"],
         is_active: true,
-        password: ""
+        password: "",
+        id: 0
     })
 
     const [selectedSchool, setSelectedSchool] = useState<School>({

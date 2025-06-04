@@ -1,4 +1,3 @@
-import './App.css';
 import {lazy, Suspense, useEffect} from "react";
 import {Route, Routes} from "react-router";
 import HomePage from "./pages/HomePage";

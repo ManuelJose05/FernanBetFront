@@ -24,7 +24,7 @@ const MatchsListPage = () => {
 
     return <div className="zoomin animation-duration-400">
         <h1 className="text-center">Listado de Partidos</h1>
-        <div className="flex flex-column align-items-center justify-content-center lg:flex-row md:flex-row sm:flex-column gap-3">
+        <div className="flex flex-column align-items-center justify-content-center lg:flex-row md:flex-column sm:flex-column gap-3">
             {
                 list.length > 0 ? list : "Los partidos no se encuentran disponibles."
             }

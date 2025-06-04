@@ -9,4 +9,5 @@ export interface Match {
     status:           string;
     referee:          string;
     school_id:        number;
+    id: number;
 }
