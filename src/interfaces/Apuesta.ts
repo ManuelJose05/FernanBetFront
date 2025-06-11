@@ -16,4 +16,5 @@ export interface Condition {
     player:           number | null;
     stat_type:        string;
     predicted_value:  number | null;
+    is_winner: boolean;
 }

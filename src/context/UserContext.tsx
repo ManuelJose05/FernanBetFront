@@ -1,6 +1,6 @@
 import {createContext, useState, ReactNode, FC} from "react";
 import {User} from "../interfaces/User";
-import axios from "axios";
+import axios, {Axios, AxiosResponse} from "axios";
 import {showMessage} from "../providers/MessageProvider";
 
 // Define la estructura del contexto
@@ -12,6 +12,7 @@ export interface UserContextType {
     setLoading: (value: boolean) => void;
     createAccount: (user: User) => Promise<boolean>;
     getUsersRanking: () => Promise<User[]>;
+    reloadUser: () => Promise<void>;
 }
 
 // Crea el contexto con un valor inicial temporal (se sobrescribirá en el provider)
@@ -20,7 +21,7 @@ export const UserContext = createContext<UserContextType>({
         email: "", username: "", first_name: "",
         last_name:  "", is_active:  false,
         level: [], experience: 0, school_id:  1,
-        course: "1",password: "",id: 0
+        course: "1",password: "",id: 0, is_superuser: false,
     },
     setCurrentUser: user => {},
     login: (email:string,password:string): Promise<boolean> => Promise.resolve(true),
@@ -28,6 +29,7 @@ export const UserContext = createContext<UserContextType>({
     setLoading: (value: boolean):void => {},
     createAccount: async (user: User): Promise<boolean> => false,
     getUsersRanking: async () => Promise.resolve([]),
+    reloadUser: () => Promise.resolve()
 });
 
 // Define las props del proveedor
@@ -38,6 +40,7 @@ interface UserProviderProps {
 // Crea el provider
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     const url:string = "http://localhost:8000/api/v1/"
+
     const [currentUser, setCurrentUser] = useState<User>(() => {
         return sessionStorage.getItem("user") == null ?
             {
@@ -54,7 +57,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     const login = async (email:string,password:string) => {
         try {
             setLoading(true)
-            const response = await axios.post(`${url}users/login/`,{
+            const response:AxiosResponse = await axios.post(`${url}users/login/`,{
                 "email": email,
                 "password": password
             })
@@ -77,7 +80,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     const createAccount = async (user:User): Promise<boolean> => {
         setLoading(true)
         try {
-            const response = await axios.post(`${url}users/createUser/`,user)
+            const response:AxiosResponse = await axios.post(`${url}users/createUser/`,user)
             sessionStorage.setItem("login", "true")
             sessionStorage.setItem("user",JSON.stringify(user))
             setCurrentUser(user)
@@ -95,17 +98,28 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
     const getUsersRanking = async ():Promise<User[]> => {
         try {
-            const response = await axios.get(`${url}users/getUsersBySchool/${currentUser.school_id}/`)
+            const response:AxiosResponse = await axios.get(`${url}users/getUsersBySchool/${currentUser.school_id}/`)
             return response.data.users;
         } catch (error) {
-            console.log(error)
             return []
         }
     }
 
+    const reloadUser = async ():Promise<void> => {
+        try {
+            const response:AxiosResponse = await axios.get(`${url}users/getUserByEmail/?email=${currentUser.email}`)
+            if (!response.data.user) return;
+            setCurrentUser(response.data.user)
+            sessionStorage.setItem("user",JSON.stringify(response.data.user))
+        } catch (error:any) {
+            showMessage({
+                severity: "error", summary: "Usuario", message: "No se ha podido obtener la información de usuario"
+            })
+        }
+    }
 
     return (
-        <UserContext.Provider value={{currentUser,setCurrentUser,login,loading,setLoading,createAccount,getUsersRanking }}>
+        <UserContext.Provider value={{currentUser,setCurrentUser,login,loading,setLoading,createAccount,getUsersRanking,reloadUser }}>
             {children}
         </UserContext.Provider>
     );

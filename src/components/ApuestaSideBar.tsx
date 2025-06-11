@@ -1,7 +1,7 @@
 import {Sidebar} from "primereact/sidebar";
 import {Column} from "primereact/column";
 import {Match} from "../interfaces/Match";
-import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useContext, useEffect, useState} from "react";
 import {Player} from "../interfaces/Player";
 import {InputNumber} from "primereact/inputnumber";
 import {FloatLabel} from "primereact/floatlabel";
@@ -10,6 +10,8 @@ import {Button} from "primereact/button";
 import {User} from "../interfaces/User";
 import {ApuestasProvider} from "../providers/ApuestasProvider";
 import {showMessage} from "../providers/MessageProvider";
+import {UserContext, UserContextType} from "../context/UserContext";
+import {AxiosResponse} from "axios";
 
 interface ApuestaSideBarProps {
     visible: boolean;
@@ -21,6 +23,7 @@ const ApuestaSideBar = (props: ApuestaSideBarProps) => {
     let provider:ApuestasProvider = new ApuestasProvider();
     const [xpApostado, setXpApostado] = useState<number>(0)
     const [loading, setLoading] = useState<boolean>(true)
+    const userContext:UserContextType = useContext<UserContextType>(UserContext);
 
     // Jugadores por equipo
     const [teamAPlayers, setTeamAPlayers] = useState<Player[]>([]);
@@ -45,7 +48,6 @@ const ApuestaSideBar = (props: ApuestaSideBarProps) => {
         if (props.match) {
             setTeamAPlayers(props.match?.local_team.jugadores)
             setTeamBPlayers(props.match?.away_team.jugadores)
-            console.log(props.match.id)
         }
     }, [props]);
 
@@ -99,16 +101,26 @@ const ApuestaSideBar = (props: ApuestaSideBarProps) => {
         }
 
         try {
-            const response = await provider.createApuesta(bodyApuesta);
-            if (response.status === 201) showMessage({
-                severity: "success", summary: "Predicción", message: "Predicción elaborada con éxito."
-            })
+            const response:AxiosResponse = await provider.createApuesta(bodyApuesta);
+            if (response.status === 201) {
+                props.setVisibleSideBar(false)
+                showMessage({
+                    severity: "success", summary: "Predicción", message: "Predicción elaborada con éxito."
+                })
+                if (sessionStorage.getItem("user") !== null) {
+                    const user:User = JSON.parse(sessionStorage.getItem("user")!);
+                    user.experience -= xpApostado;
+                    userContext.setCurrentUser(user)
+                    sessionStorage.setItem("user", JSON.stringify(user));
+                }
+            }
         } catch (error:any) {
-            console.log(error)
+            props.setVisibleSideBar(false)
             showMessage({
-                severity: "error", summary: "Predicción", message: "No se ha podido elaborar la predicción"
+                severity: "error", summary: "Predicción", message: error.response.data.message
             })
         }
+        setXpApostado(0)
     }
 
     const handleContitions = () => {

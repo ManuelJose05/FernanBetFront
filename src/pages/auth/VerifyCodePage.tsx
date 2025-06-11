@@ -2,7 +2,7 @@ import { Image } from "primereact/image";
 import { Button } from "primereact/button";
 import {useContext, useState} from "react";
 import {InputOtp,} from "primereact/inputotp";
-import {UserProvider} from "../../providers/UserProvider";
+import {UsersProvider} from "../../providers/UsersProvider";
 import {showMessage} from "../../providers/MessageProvider";
 import {useNavigate} from "react-router";
 import {User} from "../../interfaces/User";
@@ -14,7 +14,7 @@ function VerifyCodePage() {
     const [token, setTokens] = useState<string | number | undefined>();
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
-    let provider:UserProvider = new UserProvider();
+    let provider:UsersProvider = new UsersProvider();
 
     return (
         <div className="flex flex-column justify-content-center align-content-center text-center mt-2 w-full">

@@ -13,7 +13,7 @@ import {SchoolContext} from "../../context/SchoolContext";
 import {User} from "../../interfaces/User";
 import {School} from "../../interfaces/School";
 import {showMessage} from "../../providers/MessageProvider";
-import {UserProvider} from "../../providers/UserProvider";
+import {UsersProvider} from "../../providers/UsersProvider";
 
 export const COURSES = [
     { value: '1', label: '1º ESO' },
@@ -30,7 +30,7 @@ function Register() {
     const {schools, getAllSchools} = useContext(SchoolContext);
     const logged = useAuth();
     const navigate = useNavigate();
-    let provider:UserProvider = new UserProvider();
+    let provider:UsersProvider = new UsersProvider();
 
     //Nuevo usuario
     const [user, setUser] = useState<User>({
@@ -44,7 +44,8 @@ function Register() {
         level: ["RECLUTA", "Recluta"],
         is_active: true,
         password: "",
-        id: 0
+        id: 0,
+        is_superuser: false
     })
 
     const [selectedSchool, setSelectedSchool] = useState<School>({

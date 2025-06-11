@@ -1,22 +1,26 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {ApuestasProvider} from "../providers/ApuestasProvider";
 import {Apuesta, Condition} from "../interfaces/Apuesta";
 import {showMessage} from "../providers/MessageProvider";
-import {MatchProvider} from "../providers/MatchProvider";
+import {MatchsProvider} from "../providers/MatchsProvider";
 import {Match} from "../interfaces/Match";
 import ApuestaCard from "./ApuestaCard";
 import {useAuth} from "../hooks/useAuth";
-import {useNavigate} from "react-router";
+import {NavigateFunction, useNavigate} from "react-router";
 import {AxiosError} from "axios";
+import apuestaCard from "./ApuestaCard";
+import {log} from "node:util";
+import {UserContext, UserContextType} from "../context/UserContext";
 
 const ListadoApuestas = () => {
     let provider:ApuestasProvider = new ApuestasProvider();
-    let matchProvider: MatchProvider = new MatchProvider();
+    let matchProvider: MatchsProvider = new MatchsProvider();
 
     const [apuestas, setApuestas] = useState<Apuesta[]>([])
-    const [match, setMatch] = useState<Match>()
+    const [matches, setMatches] = useState<Match[]>([])
+    const userContext:UserContextType = useContext(UserContext)
     const logged:boolean = useAuth();
-    const navigate = useNavigate();
+    const navigate:NavigateFunction = useNavigate();
 
     useEffect(() => {
         if (!logged) {
@@ -24,22 +28,22 @@ const ListadoApuestas = () => {
             return;
         }
         fetchApuestas()
+        fetchUser()
     },[]);
 
-    useEffect(() => {
-
-    }, [apuestas,match]);
+    const fetchUser = async () => {
+        await userContext.reloadUser();
+    }
 
     const fetchApuestas = async () => {
         const id:number = JSON.parse(sessionStorage.getItem("user")!).id
         try {
             const response = await provider.getApuestasById(id)
             if (response.status === 200) {
-                console.log(response)
                 setApuestas(response.data.results)
                 response.data.results.map((x:Apuesta) => {
                     x.conditions.map((condition:Condition) => {
-                        if (condition.type === 'match') fetchMatch(condition.match)
+                        fetchMatch(condition.match)
                     })
                 })
             }
@@ -57,7 +61,12 @@ const ListadoApuestas = () => {
     const fetchMatch = async (id:number) => {
         try {
             const response = await matchProvider.getMatchById(id)
-            if (response.status === 200) setMatch(response.data)
+            if (response.status === 200) {
+                setMatches(prev => ({
+                    ...prev,
+                    [id]: response.data
+                }));
+            }
         } catch (error) {
             showMessage({
                 severity: "warn",
@@ -68,12 +77,17 @@ const ListadoApuestas = () => {
     }
 
     const apuestasCards = apuestas.map((apuesta:Apuesta) => {
-        if (!match) return;
-        return <ApuestaCard match={match} apuesta={apuesta} />
+        if (!matches) return null;
+        let partido:Match | undefined;
+       Object.values(matches).forEach(match => {
+           if (match.id === apuesta.conditions[0].match) partido = match;
+       })
+        if (!partido) return null;
+        return <ApuestaCard key={apuesta.id} match={partido} apuesta={apuesta} />;
     })
 
     return (
-        <div className="w-full flex flex-column align-items-center justify-content-center gap-3">
+        <div className="w-full flex flex-column align-items-center justify-content-center gap-3 xl:flex-row lg:flex-row">
             {
                 apuestasCards
             }

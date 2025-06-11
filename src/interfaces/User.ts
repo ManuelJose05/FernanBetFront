@@ -10,4 +10,5 @@ export interface User {
     school_id:  number;
     course:     string;
     password:      string;
+    is_superuser:  boolean;
 }

@@ -40,12 +40,12 @@ function TeamsRanking() {
                     />
                     <Column field="nombre" header="Club" />
                     <Column field="puntos" header="Pts" />
-                    <Column field="dg" header="DG" />
-                    <Column field="gf" header="GF" />
-                    <Column field="gc" header="GC" />
                     <Column field="victorias" header="V" />
                     <Column field="empates" header="E" />
                     <Column field="derrotas" header="D" />
+                    <Column field="dg" header="DG" />
+                    <Column field="gf" header="GF" />
+                    <Column field="gc" header="GC" />
                     <Column field="pj" header="PJ" />
                 </DataTable>
             </div>

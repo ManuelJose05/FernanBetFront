@@ -17,7 +17,7 @@ const HomeTabPage = () => {
         </section>
     )
 
-    const title:ReactNode = <span style={{color: 'black'}}>CREAR <span style={{color: '#228061'}}>APUESTA+</span></span>
+    const title:ReactNode = <span style={{color: 'black'}}>CREAR <span style={{color: '#228061'}}>PREDICCIÓN+</span></span>
 
 
     return (

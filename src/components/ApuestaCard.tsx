@@ -1,5 +1,5 @@
 import {Match} from "../interfaces/Match";
-import {Apuesta} from "../interfaces/Apuesta";
+import {Apuesta, Condition} from "../interfaces/Apuesta";
 import {Card} from "primereact/card";
 import {Player} from "../interfaces/Player";
 import {useEffect} from "react";
@@ -20,6 +20,30 @@ const ApuestaCard = (props: ApuestaCardProps) => {
 
     }, [props.match, props.apuesta]);
 
+    const findTagApuesta = () => {
+        if (props.match) {
+            return props.match.status
+        }
+        return "ND"
+    }
+
+    const isWinner = () => {
+        if (props.match.status !== 'FINALIZADO') return false;
+        props.apuesta.conditions.map((x:Condition) => {
+            if (!x.is_winner) return false;
+        })
+        return true;
+    }
+
+    const header = (
+        <div className="flex flex-row gap-2">
+            <Tag value={findTagApuesta()}/>
+            {
+                props.match.status === 'FINALIZADO' && (isWinner() ? <Tag value={"Acertada"} /> : <Tag value={"Fallida"} />)
+            }
+        </div>
+    )
+
     const findPlayerById = (id: number): Player | undefined => {
         if (props.match) {
             let player = props.match.local_team.jugadores.find((value) => value.id === id);
@@ -29,14 +53,6 @@ const ApuestaCard = (props: ApuestaCardProps) => {
         }
         return undefined;
     }
-
-    const findTagApuesta = () => {
-        if (props.match) {
-            return props.match.status
-        }
-        return "ND"
-    }
-
 
     const infoApuestas = props.apuesta.conditions.map((apuesta) => {
         let status: string = ''
@@ -99,9 +115,9 @@ const ApuestaCard = (props: ApuestaCardProps) => {
         <Card
             id={"card"}
             title={title}
-            className="w-full"
+            className="w-full xl:w-5 lg:w-5"
             footer={footer}
-            header={<Tag value={findTagApuesta()}/>}
+            header={header}
         >
 
             <div className="w-full" style={{color: 'white'}}>

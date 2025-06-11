@@ -4,19 +4,22 @@ import { TabView, TabPanel } from "primereact/tabview";
 import { homeMenuOptions } from "../data/homeMenu";
 import {useNavigate} from "react-router";
 import {Tag} from "primereact/tag";
-import {useContext, useEffect} from "react";
+import {useContext, useEffect, useState} from "react";
 import {UserContext} from "../context/UserContext";
 import {LevelIcons} from "../interfaces/level_icons";
+import {Avatar} from "primereact/avatar";
+import {Sidebar} from "primereact/sidebar";
+import UserProfile from "./UserProfile";
 
 function HomePage() {
     const navigate = useNavigate();
     const {currentUser} = useContext(UserContext);
+    const [visible, setVisible] = useState<boolean>(false)
 
     useEffect(() => {
-        console.log(currentUser);
     }, [currentUser]);
 
-    const tabPanels = homeMenuOptions.map((option,index) => {
+    const tabPanels = homeMenuOptions(currentUser).map((option,index) => {
         return <TabPanel
             key={index}
             leftIcon={option.icon}
@@ -59,15 +62,16 @@ function HomePage() {
                     )}
                     {
                         sessionStorage.getItem("login") === 'true' && (
-                            <div className="flex flex-row gap-4 sm:gap-3 justify-content-start mb-2">
+                            <div className="flex flex-column gap-2 xl:flex-row lg:flex-row md:flex-row sm:gap-3 justify-content-center mb-2">
                                 <Tag icon="pi pi-trophy" value={currentUser.experience + " XP"} style={{fontSize: '20px'}}/>
+                                <Tag className="cursor-pointer" icon="pi pi-user" value={currentUser.username} style={{fontSize: '20px'}} onClick={() => setVisible(true)} />
                                 <Tag icon={getLevelIcon(currentUser.level[0])} value={currentUser.level[1]} style={{fontSize: '20px'}}/>
                             </div>
                         )
                     }
                 </section>
 
-                <TabView className="mt-3">
+                <TabView className="mt-3" scrollable>
                     {tabPanels}
                 </TabView>
             </div>
@@ -78,6 +82,8 @@ function HomePage() {
                 <span>Terms | Privacy Policy | Sitemap</span>
                 <span>Anti-Corruption Policy</span>
             </footer>
+
+            <UserProfile user={currentUser} setVisible={setVisible} visible={visible} />
         </div>
     );
 }
