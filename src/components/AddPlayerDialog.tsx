@@ -136,7 +136,6 @@ const AddPlayerDialog = (props:AddPlayerDialogProps) => {
         <Dialog
             blockScroll={true}
             header={"Nuevo Jugador"}
-            showCloseIcon={true}
             closable={true}
             style={{background: 'black'}}
             onHide={() => setVisible(false)}
