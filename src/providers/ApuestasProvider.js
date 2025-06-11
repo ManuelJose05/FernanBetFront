@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export class ApuestasProvider {
-    basePath = 'http://localhost:8000/api/v1/'
+    basePath = 'https://fernanbetbackend.onrender.com/api/v1/'
 
     getApuestasById = async (id) => {
         return axios.get(`${this.basePath}bets/mis_apuestas/?id=${id}`)

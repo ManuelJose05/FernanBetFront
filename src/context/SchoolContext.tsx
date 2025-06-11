@@ -23,7 +23,7 @@ interface SchoolProviderProps {
 
 // Crea el provider
 export const SchoolProvider: FC<SchoolProviderProps> = ({ children }:SchoolProviderProps) => {
-    const url:string = "http://localhost:8000/api/v1/"
+    const url:string ='https://fernanbetbackend.onrender.com/api/v1/'
     const [schools, setSchools] = useState<School[]>([])
 
     const getAllSchools = async ():Promise<void> => {

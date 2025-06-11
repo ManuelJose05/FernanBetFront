@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export class TeamProvider {
-    basePath = 'http://localhost:8000/api/v1/'
+    base_path = 'https://fernanbetbackend.onrender.com/api/v1/'
 
     getAllEquipos = async () => {
         return await axios.get(`${this.basePath}teams/getAllTeams/`)

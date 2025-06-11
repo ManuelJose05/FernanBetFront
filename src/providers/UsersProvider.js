@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export class UsersProvider {
-    basePath = 'http://localhost:8000/api/v1/'
+    basePath = 'https://fernanbetbackend.onrender.com/api/v1/'
 
     verifyCode = async (code) => {
         return await axios.post(`${this.basePath}users/verify_code/`,{

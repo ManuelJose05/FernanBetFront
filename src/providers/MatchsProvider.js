@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export class MatchsProvider {
-    base_path = 'http://localhost:8000/api/v1/';
+    base_path = 'https://fernanbetbackend.onrender.com/api/v1/'
 
     getMatchById = async (id) => {
         return await axios.get(`${this.base_path}matchs/${id}/getMatchById/`)

@@ -23,7 +23,7 @@ interface MatchProviderProps {
 
 // Crea el provider
 export const MatchProvider: FC<MatchProviderProps> = ({ children }:MatchProviderProps) => {
-    const url:string = "http://localhost:8000/api/v1/"
+    const url:string ='https://fernanbetbackend.onrender.com/api/v1/'
     const [matchs, setMatchs] = useState<Match[]>([])
 
     const getMatchsList = async ():Promise<void> => {

@@ -39,7 +39,7 @@ interface UserProviderProps {
 
 // Crea el provider
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
-    const url:string = "http://localhost:8000/api/v1/"
+    const url:string ='https://fernanbetbackend.onrender.com/api/v1/'
 
     const [currentUser, setCurrentUser] = useState<User>(() => {
         return sessionStorage.getItem("user") == null ?
