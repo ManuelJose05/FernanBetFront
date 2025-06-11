@@ -81,7 +81,6 @@ const AddTeamDialog = (props:AddTeamDialogProps) => {
             blockScroll={true}
             header={"Nuevo Equipo"}
             closable={true}
-            showCloseIcon={true}
             visible={visible}
             onHide={() => setVisible(false)}
             className=""
